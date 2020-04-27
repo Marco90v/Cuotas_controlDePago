@@ -1,0 +1,89 @@
+<div ng-controller="ModifiCuota" class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 margen">
+			<form name="datoMonto">
+				<div class="form-group">
+					<label for="Monto">Monto</label>
+					<input type="number" class="form-control form-control-sm" id="Monto" ng-required="true" ng-model="monto">
+					<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+				</div>
+				<button class="btn btn-success btn-sm" ng-click="guardar()" ng-disabled="datoMonto.$invalid">
+					<i class="fas fa-save"></i>
+					Agregar
+				</button>
+			</form>
+		</div>
+		<div class="col-md-6 offset-md-3 alert alert-success margen animatepopup" role="alert" ng-show="trueNuevo"> 
+			Nuevo Monto Agregado
+		</div>
+		<div class="col-md-6 offset-md-3 alert alert-danger margen animatepopup" role="alert" ng-show="falseNuevo">
+			Error al Agregar Monto
+		</div>
+		<table class="table table-sm centrar margen ancho50">
+			<thead class="thead-dark">
+			  <tr>
+				<th scope="col">ID</th>
+				<th>Fecha de Creacion</th>
+				<th>Monto</th>
+			  </tr>
+			</thead>
+			<tbody>
+				<tr ng-if="listMonto==-1">
+					<td class="cargaSpiner" colspan="12">
+						<!-- <i class="fas fa-spinner fa-spin fa-10x"></i> -->
+						<i class="fas fa-spinner fa-pulse fa-10x"></i>
+					</td>
+				</tr>
+				<tr ng-if="listMonto==0">
+					<td colspan="12">
+						<div class="alert alert-primary" role="alert">
+							No hay miembros registrados
+						</div>
+					</td>
+				</tr>
+				<tr ng-repeat="Lista in dataset" >
+					<th scope="row">{{Lista.id}}</th>
+					<td>{{Lista.f_creacion}}</td>
+					<td>{{Lista.monto}}</td>
+				</tr>
+			</tbody>
+		  </table>
+		<!-- <div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-8">
+						<h4>Modificar Cuotas de Pago</h4>
+					</div>
+					<div class="col-xs-4">
+						<label class="control-label">Buscar</label>
+						<input class="form-control" type="text" ng-model="buscarM">
+					</div>
+				</div>	
+			</div>
+			<div class="panel-body">
+				<div class="col-xs-6 col-xs-offset-3 ">
+					<table class="table table-hover table-condensed">
+						<thead>
+							<tr>
+								<th>Fecha de registro de Cuota</th>
+								<th>Monto</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="Lista in dataset | filter: buscarM" >
+								<td>{{Lista.fech}}</td>
+								<td>{{Lista.monto}}</td>
+							</tr>
+						</tbody>
+					</table>
+				<br/>
+					<div class="btn-toolbar" role="toolbar">
+						<div class="btn-group">
+							<button ng-repeat="i in nm(nreg) track by $index" ng-click ="mas($index + 1)" type="button" class="btn btn-default">{{$index + 1}}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+	</div>
+</div>

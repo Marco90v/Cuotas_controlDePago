@@ -1,0 +1,53 @@
+<div  class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 margen">
+			<form name="datosUsuario">
+				<div class="form-group">
+					<label for="Cedula">Cedula</label>
+					<input type="number" class="form-control form-control-sm" id="cedula" ng-required="true" ng-model="datos.ced">
+					<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+				</div>
+				<div class="form-group">
+					<label for="Nombre">Nombre</label>
+					<input type="text" class="form-control form-control-sm" id="Nombre" required ng-model="datos.nomb">
+				</div>
+				<div class="form-group">
+					<label for="Apellido">Apellido</label>
+					<input type="text" class="form-control form-control-sm" id="Apellido" required ng-model="datos.apell">
+				</div>
+				<div class="form-group">
+					<label for="Telefono">Telefono</label>
+					<input type="number" class="form-control form-control-sm" id="Telefono" required  ng-model="datos.cel">
+				</div>
+				<div class="form-group">
+					<label for="Correo">Correo</label>
+					<input type="email" class="form-control form-control-sm" id="Correo" required ng-model="datos.eMail">
+				</div>
+				<div class="form-group">
+					<label for="f_Nacimiento">Fecha de Nacimiento</label>
+					<input type="date" class="form-control form-control-sm" id="f_Nacimiento" required ng-model="datos.dateN">
+				</div>
+				<div class="form-group">
+					<label for="f_Ingreso">Fecha de Ingreso</label>
+					<input type="date" class="form-control form-control-sm" id="f_Ingreso" required ng-model="datos.dateI">
+				</div>
+				<div class="form-group">
+					<label for="Estado">Estado</label>
+					<input type="text" class="form-control form-control-sm" id="Estado" required ng-model="datos.estado">
+				</div>
+				<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+				<button class="btn btn-success btn-sm" ng-click="guardar()" ng-disabled="datosUsuario.$invalid">
+					<span class="glyphicon glyphicon-floppy-save"></span>
+					Guardar 
+				</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="alert alert-success margen" role="alert" ng-show="trueNuevo">
+		Nuevo Usuario Agregado
+	</div>
+	<div class="alert alert-danger margen" role="alert" ng-show="falseNuevo">
+		Error al Agregar Nuevo Usuario
+	</div>
+</div>
