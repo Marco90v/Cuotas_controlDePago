@@ -1,43 +1,37 @@
-<div   ng-controller="miembros" class="container">
+<!-- ng-controller="miembros" -->
+<div class="container">
 	<div class="row">
-
-		
-				<div class="col-md-6 margen">
-					<h4>Lista de Miembros ({{total}})</h4>
+		<div class="col-md-6 margen">
+			<h4>Lista de Miembros ({{total}})</h4>
+		</div>
+		<div class="col-md-6 margen">
+			<div class="input-group input-group-sm mb-3">
+				<input type="text" class="form-control" placeholder="" aria-describedby="basic-addon2" ng-model="buscarM">
+				<div class="input-group-append">
+					<span class="input-group-text" id="basic-addon2">Buscar</span>
 				</div>
-				<div class="col-md-6 margen">
-					<div class="input-group input-group-sm mb-3">
-						<input type="text" class="form-control" placeholder="" aria-describedby="basic-addon2" ng-model="buscarM">
-						<div class="input-group-append">
-						<span class="input-group-text" id="basic-addon2">Buscar</span>
-						</div>
-					</div>
-
-					<!-- <label class="">Buscar</label>
-					<input class="" type="text" ng-model="buscarM"> -->
-				</div>
-
+			</div>
+		</div>
 		<table class="table table-sm">
 			<thead class="thead-dark">
-			  <tr>
-				<th scope="col">ID</th>
-				<th>Cedula</th>
-				<th>Nombre</th>
-				<th>Apellido</th>
-				<th>Telefono</th>
-				<th>Correo</th>
-				<th>Fecha de Nacimiento</th>
-				<th>Fecha de Ingreso</th>
-				<th>Grado</th>
-				<th>Pagar</th>
-				<th>Ver</th>
-				<th>Editar</span></th>
-			  </tr>
+				<tr>
+					<th scope="col">ID</th>
+					<th>Cedula</th>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Telefono</th>
+					<th>Correo</th>
+					<th>Fecha de Nacimiento</th>
+					<th>Fecha de Ingreso</th>
+					<th>Estado</th>
+					<th>Pagar</th>
+					<th>Ver</th>
+					<th>Editar</span></th>
+				</tr>
 			</thead>
 			<tbody>
 				<tr ng-if="listMiembros==-1">
 					<td class="cargaSpiner" colspan="12">
-						<!-- <i class="fas fa-spinner fa-spin fa-10x"></i> -->
 						<i class="fas fa-spinner fa-pulse fa-10x"></i>
 					</td>
 				</tr>
@@ -59,22 +53,17 @@
 					<td>{{Lista.ingreso}}</td>
 					<td>{{Lista.estado}}</td>
 					<td>
-						<a href="#!/pagar">
-							<button ng-click="p(Lista.cedula, Lista.nombre, Lista.apellido)" class="btn btn-primar btn-sm">
-							<!-- Pagar -->
+						<a href="#!/pagar/{{Lista.cedula}}" class="link">
 							<span class="fas fa-money-bill-alt"></span>
-							</button>
 						</a>
 					</td>
 					<td>
-						<a href="#!/Lpagos">
-							<button ng-click="p(Lista.cedula, Lista.nombre, Lista.apellido)" class="btn btn-primar btn-sm">
-								<span class="fas fa-eye"></span>
-							</button>
+						<a href="#!/Lpagos/{{Lista.cedula}}" class="link">
+							<span class="fas fa-eye"></span>
 						</a>
 					</td>
 					<td>
-						<a href="#!/Modi">
+						<a href="#!/Modi/{{Lista.id}}" class="link">
 							<button ng-click="modi(Lista.cedula)" class="btn btn-primar btn-sm">
 								<span class="fas fa-user-edit"></span>
 							</button>
@@ -82,78 +71,6 @@
 					</td>
 				</tr>
 			</tbody>
-		  </table>
-
-
-
-		<!-- <div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-xs-8">
-						<h4>Lista de Miembros ({{total}})</h4>
-					</div>
-					<div class="col-xs-4">
-						<label class="control-label">Buscar</label>
-						<input class="form-control" type="text" ng-model="buscarM">
-					</div>
-				</div>	
-			</div>
-			<div class="panel-body">
-				<table class="table table-hover table-condensed">
-					<thead>
-						<tr>
-							<th>Cedula</th>
-							<th>Nombre</th>
-							<th>Apellido</th>
-							<th>Telefono</th>
-							<th>Correo</th>
-							<th>Fecha de Nacimiento</th>
-							<th>Fecha de Ingreso</th>
-							<th>Grado</th>
-							<th>Pagar</th>
-							<th><span class="glyphicon glyphicon-eye-open"></span></th>
-							<th><span class="glyphicon glyphicon-pencil"></span></th>
-							<th><span class="glyphicon glyphicon-remove"></span></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="Lista in dataset | filter: buscarM" >
-							<td>{{Lista.cedula}}</td>
-							<td>{{Lista.nombre}}</td>
-							<td>{{Lista.apellido}}</td>
-							<td>{{Lista.cel}}</td>
-							<td>{{Lista.eMail}}</td>
-							<td>{{Lista.f_nac}}</td>
-							<td>{{Lista.f_ingr}}</td>
-							<td>{{Lista.G}}</td>
-							<td>
-								<a href="#/pagar">
-									<button ng-click="p(Lista.cedula, Lista.nombre, Lista.apellido)" class="btn btn-default btn-xs">
-									Pagar
-									</button>
-								</a>
-							</td>
-							<td>
-								<a href="#/Lpagos">
-									<button ng-click="p(Lista.cedula, Lista.nombre, Lista.apellido)" class="btn btn-default btn-xs">
-										<span class="glyphicon glyphicon-eye-open"></span>
-									</button>
-								</a>
-							</td>
-							<td>
-								<a href="#/Modi">
-									<button ng-click="modi(Lista.cedula)" class="btn btn-default btn-xs">
-										<span class="glyphicon glyphicon-pencil"></span>
-									</button>
-								</a>
-							</td>
-							<td><button ng-click="elim(Lista.cedula)" class="btn btn-default btn-xs">
-									<span class="glyphicon glyphicon-remove"></span>
-								</button></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div> -->
+		</table>
 	</div>
 </div>

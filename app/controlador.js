@@ -1,52 +1,23 @@
 const cuotas = angular.module('cuotas',['ngRoute', 'ngAnimate']);
-var paCed;
-var nom;
-var apel;
+const meses = [null,'Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const ruta = "/Codigo/cuotas/modelo/"; // Ruta donde se encuentran los archivos PHP
 
-let ruta = "/Codigo/cuotas/modelo/";
-
-cuotas.config(['$routeProvider',
-              function($routeProvider) {
-                $routeProvider.
-                  when('/ListaMiembros', {
-                    templateUrl: 'view/listMiemb.html',
-                    //controller: 'miembros'
-                  }).
-                  when('/NuevoMiembro', {
-                    templateUrl: 'view/NuevMiemb.html',
-                    controller: 'nuevoM'
-                  }).
-                  when('/ModificarCuo', {
-                    templateUrl: 'view/ModiCuo.html',
-                  }).
-                  when('/Estadisticas', {
-                    templateUrl: 'view/estadis.html',
-                  }).
-                  when('/Lpagos', {
-                    templateUrl: 'view/lista_p.html',
-                    //controller: 'pagos'
-                  }).
-                  when('/pagar', {
-                    templateUrl: 'view/p.html',
-                    //controller: 'pagos'
-                  }).
-                  when('/Modi', {
-                    templateUrl: 'view/NuevMiemb.html',
-                    //controller: 'pagos'
-                  }).
-                  otherwise({
-                    redirectTo: '/',
-                      templateUrl: 'view/ini.html',
-                      //controller: 'miembros'
-                  });
-              }]);
-
+cuotas.config(['$routeProvider', ($routeProvider)=>{
+    $routeProvider
+	.when('/ListaMiembros', { templateUrl: 'view/listMiemb.html', controller: 'miembros' })
+	.when('/NuevoMiembro', { templateUrl: 'view/NuevMiemb.html', controller: 'nuevoM' })
+    .when('/ModificarCuo', { templateUrl: 'view/ModiCuo.html', controller: 'ModifiCuota' })
+    .when('/Lpagos/:cedula', { templateUrl: 'view/lista_p.html', controller: 'Lpagos' })
+    .when('/pagar/:cedula', { templateUrl: 'view/pagar.html', controller: 'pagar' })
+    .when('/Modi/:id', { templateUrl: 'view/NuevMiemb.html', controller: 'edit' })
+    .otherwise({ redirectTo: '/', templateUrl: 'view/ini.html', });
+}]);
 
 cuotas.controller('miembros', function($scope, $http){
 	$scope.total = 0;
 	$scope.listMiembros= -1;
 	$http.post(ruta+'accion.php',{accion:1})
-	.then(function (response){
+	.then((response)=>{
 		if(response.data.msg == false){
 			$scope.total = 0;
 			$scope.listMiembros= 0;
@@ -58,182 +29,105 @@ cuotas.controller('miembros', function($scope, $http){
 	});
 });
 
-cuotas.controller('nuevoM', function($scope, $http){
-	$scope.valor=true;
+cuotas.controller('nuevoM', function($scope, $http, $timeout){
+	$scope.datos={};
+	$scope.datos.estado = "1";
 	$scope.guardar = function(){
-		$scope.datos.accion=2;
+		if($scope.datos.estado == 1){
+			$scope.datos.accion=2;
 			$http.post(ruta+'accion.php',$scope.datos)
-			.then(function (response){
-				response.data ? trueNuevo() : falseNuevo();
-			});
+			.then((response)=>{ response.data.msg ? falseNuevo($scope) : trueNuevo($scope,$timeout); });
+		}else{ alert("Estado debe ser activado"); }
 	}
-
-	function trueNuevo() {
-		$scope.datos={};
-		$scope.trueNuevo=true;
-		$scope.falseNuevo=false;
-	}
-	function falseNuevo() {
-		$scope.trueNuevo=false;
-		$scope.falseNuevo=true;
-	}
-
-	// $scope.modi = function(cedula){
-	// 	$scope.valor=false;
-	// 	$http.post('modelo.php', {accion:8, ced:cedula})
-	// 	.success(function(response){
-	// 		console.log($scope.valor);
-	// 	});
-	// }
 });
 
-
-cuotas.controller('Lpagos', function($scope, $http){
-	$scope.miemb = nom + " " + apel;
-	$http.post('modelo.php',{accion:3,ced:paCed})
-	.success(function (response){
-		if(response.msg){
-			alert(response.msg);}
-		else if(response.lista){
-			$scope.dataset = response.lista;
-			$scope.dataset2 = response.lista2;
-			$scope.total = response.Total;}
-	});
-});
-
-cuotas.controller('pagar', function($scope, $http){
-	$scope.ced = paCed;
-	$scope.miemb = nom + " " + apel;
-	$scope.mostrar =[];
-	var mes;
-	var ano;
-
-	$http.post('modelo.php',{accion:4,ced:paCed})
-	.success(function (response){
-		if(response.msg){
-			alert(response.msg);}
-		else {
-			mes = parseInt(response.ulti_M);
-			$scope.mostrar.push({ultA:response.ulti_A, ultM:response.ulti_M, um:response.mon_Cuo, mA:response.mon_Cuo});
-			//mes = mes + 1;
-
-			ano = response.ulti_A;
-			$scope.ult_A=response.ulti_A;
-			$scope.ult_M=response.ulti_M;
-			$scope.u_m=response.mon_Cuo;
-
-			$scope.aS=parseInt(response.aS);
-			$scope.mS=parseInt(response.mS);
-			$scope.ult_A_num=parseInt(response.ulti_A);}
-	});
-
-
-
-
-	//FUNCION PARA AGREGAR NUEVOS CAMPOS
-	var n = 12;
-	$scope.range = function() {
-		if($scope.aS == $scope.ult_A_num){n= $scope.mS;}
-		if($scope.aS >= $scope.ult_A_num){
-			if(mes < n){
-				mes = mes + 1;
-				var mesCad = mes.toString();
-				if(mesCad.length<2){
-					mesCad = "0" + mesCad;}
-				$scope.mostrar.push({ultA:ano, ultM:mesCad, um:$scope.u_m, mA:$scope.u_m});
-			}
-
-			if(mes==12){
-				$scope.ult_A_num++;
-				ano = $scope.ult_A_num.toString();
-				mes=0;
-				if($scope.aS >= $scope.ult_A_num){
-					n=$scope.mS;}
-			}
+cuotas.controller('Lpagos', function($scope, $http, $routeParams){
+	$scope.listPagos=-1;
+	$http.post(ruta+'accion.php',{accion:3,cedula:$routeParams.cedula})
+	.then((response)=>{
+		if (response.data.msg) { $scope.listPagos=0; }else{
+			$scope.listPagos=1;
+			$scope.dataset = response.data;
 		}
-    };
-
-    //FUNCION QUE ELIMINA ELEMENTOS DEL ARREGLO DE OBJETOS JSON MOSTRAR **FUNCION NO SE USA EN ESTE SISTEMA**
-    $scope.cancelar = function(i){
-    	var index = $scope.mostrar.indexOf(i);
-  		$scope.mostrar.splice(index, 1);
-  		if(parseInt($scope.ult_M)==12){
-  			$scope.ult_A = parseInt($scope.ult_A);
-  			$scope.ult_A++;
-  			$scope.ult_A = $scope.ult_A.toString();
-
-  			$scope.ult_M = parseInt($scope.ult_M);
-  			$scope.ult_M = 01;
-  			$scope.ult_M = $scope.ult_M.toString();
-  		}
-  		else
-  		{
-  			$scope.ult_M = parseInt($scope.ult_M);
-  			$scope.ult_M++;
-  			$scope.ult_M = $scope.ult_M.toString();
-  		}
-    }
-
-
-    $scope.pagar = function(c, mo, a, me, i, pago){
-    	if(parseInt($scope.u_m) < parseInt(mo)){
-    		alert("Monto a cancelar es mayor a la cuota mensual establecida");}
-    	else {
-    		if(parseInt(a) == parseInt($scope.ult_A) && parseInt(me) == parseInt($scope.ult_M)){
-    			var fecha_p = a + "-" + me + "-01";
-    			console.log($scope.p_parc);
-    			$http.post('modelo.php',{accion:5, ced:c, cuota:mo, fp:fecha_p, monto:pago})
-				.success(function (response){
-					alert(response.msg);
-					if(parseInt(response.msg2)==1){
-						//alert(response.msg);
-						$scope.cancelar(i);
-					}
-				});
-    		}
-    		else {alert("Debe cancelar la cuoto mas antigua primero");}
-
-    		/*$http.post('modelo.php',{accion:5})
-			.success(function (response){
-
-			}*/
-    	}
-    	//console.log("cedula: " + c + "monto: " + mo + "fecha de la cuota: " + a + "-" + me + "-01");
-    }
-
+	});
 });
 
+cuotas.controller('pagar', function($scope, $http, $routeParams, $timeout){
+	$scope.total = 0;
+	$scope.listDeuda = -1;
+	$http.post(ruta+'accion.php', {accion:4, cedula:$routeParams.cedula})
+	.then((response)=>{
+		if(response.data.msg==false){ $scope.listDeuda = 0; 
+		}else{
+			$scope.listDeuda = 1;
+			$scope.dataset = response.data;
+			$scope.dataset.map((arr)=>{
+				arr.mes = meses[arr.mes];
+				$scope.total += parseInt(arr.monto);
+			});
+		}
+	});
 
-cuotas.controller('ModifiCuota', function($scope,$timeout,$http){
+	$scope.pagar = ()=>{
+		if($scope.montoPagar == $scope.total && $scope.montoPagar != 0){
+			$http.post(ruta+'accion.php',{accion:5,cedula:cedula, datos:$scope.dataset})
+			.then((response)=>{ response.data.msg  ? trueNuevo($scope,$timeout) : falseNuevo($scope); });
+		}else if($scope.montoPagar==0){ }
+	}
+});
+
+cuotas.controller('ModifiCuota', function($scope,$http,$timeout){
 	$scope.datos={};
 	$scope.listMonto=-1;
+	$scope.dataset=[];
 
 	$http.post(ruta+'accion.php',{accion:6})
 	.then((response)=>{
 		if(response.data.length>0){
 			$scope.dataset=response.data;
 			$scope.listMonto=1;
-		}else{
-			$scope.listMonto=0;
-		}	
+		}else{ $scope.listMonto=0; }	
 	});
 
 	$scope.guardar = function(){
 		$scope.datos.accion=7;
 		$scope.datos.monto=$scope.monto;
 		$http.post(ruta+'accion.php', $scope.datos)
-		.then((response)=>{
-			response.data.msg==false ? falseNuevo() : trueNuevo(response.data[0]);
-		});
-	}
-	function trueNuevo(arr) {
-		$scope.dataset.push(arr);
-		$scope.trueNuevo=true;
-		$scope.falseNuevo=false;
-		$timeout(()=>{$scope.trueNuevo=false;},3000);
-	}
-	function falseNuevo() {
-		$scope.trueNuevo=false;
-		$scope.falseNuevo=true;
+		.then((response)=>{ response.data.msg ? falseNuevo($scope) : trueNuevo($scope,$timeout,response.data[0]); });
 	}
 });
+
+cuotas.controller('edit', function($scope, $http,$routeParams,$timeout){
+	$http.post(ruta+'accion.php',{accion:8,id:$routeParams.id})
+	.then((response)=>{
+		$scope.datos={};
+		$scope.datos.ced = parseInt(response.data[0].cedula);
+		$scope.datos.nomb = response.data[0].nombre;
+		$scope.datos.apell = response.data[0].apellido;
+		$scope.datos.cel = parseInt(response.data[0].telefono);
+		$scope.datos.eMail = response.data[0].correo;
+		$scope.datos.dateN = new Date(response.data[0].nacimiento);
+		$scope.datos.dateI = new Date(response.data[0].ingreso);
+		$scope.datos.estado = response.data[0].estado.toString();		
+	});
+	$scope.guardar = function(){
+		$scope.datos.id = parseInt(id);
+		$scope.datos.accion=9;
+		$http.post(ruta+'accion.php',$scope.datos)
+		.then((response)=>{ response.data ? trueNuevo($scope,$timeout) : falseNuevo($scope); });
+	}
+});
+
+
+function trueNuevo(variable,time,arr=false) {
+	variable.datos={};
+	arr!=false ? variable.dataset.push(arr) : false;
+	variable.trueNuevo=true;
+	variable.falseNuevo=false;
+	time(()=>{variable.trueNuevo=false;},3000);
+}
+function falseNuevo(variable) {
+	variable.msg = 
+	variable.trueNuevo=false;
+	variable.falseNuevo=true;
+}

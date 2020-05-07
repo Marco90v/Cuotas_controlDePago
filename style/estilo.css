@@ -1,3 +1,12 @@
+h1{
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+p{
+    text-align: center;
+    font-size: 22px;
+}
 .centrar{
     margin: auto;
 }
@@ -17,4 +26,6 @@
 .animatepopup.ng-hide{
     opacity: 0;
 }
-  
+.link{
+    color: black;
+} 

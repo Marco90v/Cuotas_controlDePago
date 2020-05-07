@@ -24,10 +24,8 @@
 		private $c_t_Pagos =
 			"create table `pagos` (
 				`id` int (11) NOT NULL AUTO_INCREMENT,
-				`ceduela` int (9) NOT NULL,
-				`cuota` int (9) NOT NULL,
+				`cedula` int (9) NOT NULL,
 				`monto` int (9) NOT NULL,
-				`estado` int (1) NOT NULL,
 				`f_pago` date NOT NULL,
 				`f_cancelacion` date NOT NULL,
 				PRIMARY KEY (id)
@@ -48,14 +46,16 @@
 								$this->datosConn["claveSQL"]);
 			$conn = $this->conecDB($conn);
 			$conn = $this->createTable($conn);
-			return $conn;}
+			return $conn;
+		}
 
 		//REALIZAR CONSULTAS SQL
 		function consulQuery($quer){
 			$conex = $this->conectar();
 			$res = $conex->query($quer);
 			$conex->close();
-			return $res;}
+			return $res;
+		}
 
 		// CONECTA A LA BASE DE DATOS, SI NO EXISTE LLAMA A LA FUNCION PARA CREARLA
 		private function conecDB($conn){ return $conn->select_db($this->datosConn["BaseSQL"]) ? $conn : $this->createDB($conn); }
@@ -76,12 +76,6 @@
 		private function createTablePagos($conn) { return $conn->query($this->c_t_Pagos) ? true : false; }
 		private function creteTableMontos($conn) { return $conn->query($this->c_t_Montos) ? true : false; }
 
-		// function prueba(){
-		// 	return $this->conectar();
-		// }
 	}
-
-// $insta = new cone();
-// $conn = $insta->prueba();
 
 ?>

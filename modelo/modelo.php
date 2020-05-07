@@ -1,4 +1,5 @@
 <?php
+    setlocale(LC_TIME, "spanish");
     include ('conec.php');
 
     class Modelo {
@@ -12,36 +13,27 @@
         }
 
         // Fecha actual
-        private function fechaActual(){
-            return date("Y")."-".date("m")."-".date("d");
-        }
+        private function fechaActual(){ return date("Y-m-d"); }
 
         // Dar formato al select para su devolucion
-        private function formatSelect($result)
-        {
+        private function formatSelect($result){
             $fila;
-            foreach ($result as $key => $value) {
-                $fila[$key]=$value;
-                //echo $key;
-            }
-            // echo $fila;
-            // foreach ($variable as $row) {
-            //     $fila["all"][]=$row;
-            // }
-            // print_r($fila);
+            foreach ($result as $key => $value) {$fila[$key]=$value; }
             return $fila;
         }
 
         // Cargar todos loes elemento de la tabla miembro
-        public function cargar(){
-            $query = "select * from `miembros`";
+        public function listMiembros($query = "select * from `miembros`"){
             $result = $this->querys($query);
-            // $this->formatSelect($result);
             return $result->num_rows > 0 ? json_encode($this->formatSelect($result)) : '{"msg":false}';
         }
 
         // Agrega nuevo suario
         public function nuevoUsuario($datos){
+            $monto = $this->getUltimoMonto();
+            if (!$monto){return '{"msg":"Debe agregar un Monto primero"}';}
+            $result = $this->querys("select * from `miembros` where `cedula`=".$datos->ced);
+            if ($result->num_rows > 0){return '{"msg":"Usuario ya Existe"}';}
             $query = "insert into `miembros` values (NULL, ".$datos->ced.",
             '".$datos->nomb."',
             '".$datos->apell."',
@@ -51,7 +43,10 @@
             '".$datos->dateI."',
             '".$datos->estado."')";
             $result = $this->querys($query);
+            $d = json_decode('{"accion":2,"cedula":'.$datos->ced.',"monto":'.$monto[0]['monto'].',"fecha":"'.date("Y").'-'.date("m").'-1"}');
+            $result = $result ? $this->setPago($d) : false;
             return json_encode($result);
+            // return '{"msg":"Usuario Agregado"}';
         }
 
         // Agrega nuevo monto
@@ -59,40 +54,79 @@
             $query = "insert into `montos` values (NULL, '".$this->fechaActual()."', '".$datos->monto."')";
             $result = $this->querys($query);
             if($result){
-                // $result = $this->cargarMonto("select top 1 * from `montos` order by id desc");
-                // return $result;
                 $result = $this->querys("select * from `montos` order by id desc limit 1");
                 return json_encode($this->formatSelect($result));
-            }else{
-                $result = '{"msg":false}';
-            }
+            }else{  $result = '{"msg":false}'; }
             return json_encode($result);
         }
 
+        // Retorna lista de montos
         public function cargarMonto($query = "select * from `montos`"){
             $result = $this->querys($query);
             return $result->num_rows > 0 ? json_encode($this->formatSelect($result)) : '{"msg":false}';
         }
+
+        // Retorna historial de pagos
+        public function getPagos($cedula){
+            $query = "select `pagos`.`id`, `miembros`.`cedula`, `miembros`.`nombre`, `miembros`.`apellido`, `pagos`.`f_pago`, `pagos`.`f_cancelacion`, `pagos`.`monto` from `miembros`, `pagos` where `miembros`.`cedula`=".$cedula." and `pagos`.`cedula`=".$cedula."";
+            $result = $this->querys($query);
+            return $result->num_rows > 0 ? json_encode($this->formatSelect($result)) : '{"msg":false}';
+        }
     
+        // Retorna ultimo pago y genera pagos pendientes
+        public function getUltimoPago($cedula){
+            $query = "select * from `pagos` where cedula = '".$cedula."' order by id desc limit 1";
+            $result = $this->formatSelect($this->querys($query));
+            $fA = new DateTime($this->fechaActual());
+            $fC = new DateTime($result[0]["f_pago"]);
+            $diferencia = $fC->diff($fA);
+            $meses = $diferencia->m;
+            if ($diferencia->m == 1){
+                $fecha = $this->fechaActual();
+                $mes = (int)explode("-", $fecha)[1];
+                $monto = $this->getUltimoMonto()[0]["monto"];
+                return '[{"fecha":"'.$fecha.'","mes":"'.$mes.'", "monto":"'.$monto.'"}]';
+            }else if($diferencia->m >= 2){
+                $monto = $this->getUltimoMonto()[0]["monto"];
+                $fecha1 = $result[0]["f_pago"];
+                $fecha2 = date("Y")."-".date("m")."-1";
+                return '[{"mes":'.(int)explode("-", $fecha1)[1].',"fecha":"'.$fecha1.'", "monto":"'.$monto.'"},{"mes":'.(int)date("m").',"fecha":"'.$fecha2.'", "monto":"'.$monto.'"}]';
+            }
+            return '{"msg":false}';
+        }
+
+        // Retorna ultimo monto
+        public function getUltimoMonto(){
+            $query = "select monto from `montos` order by f_creacion desc limit 1";
+            $result = $this->querys($query);
+            return $result->num_rows > 0 ? $this->formatSelect($result) : false;
+        }
+
+        // Agrega pago
+        public function setPago($d){
+            $fechaActual = $this->fechaActual();
+            if($d->accion==2){
+                $query = "insert into `pagos` values (NULL, ".$d->cedula.", ".$d->monto.", '".$d->fecha."', '".$fechaActual."')";
+                return $this->querys($query);
+            }else if($d->accion==5){
+                $res = false;
+                foreach ($d->datos as $value) {
+                    $query = "insert into `pagos` values (NULL, ".$d->cedula.", ".$value->monto.", '".$value->fecha."', '".$fechaActual."')";
+                    $res = $this->querys($query);
+                }
+                return '{"msg":'.$res.'}';
+            }
+        }
+
+        // Recuperar datos de un usuario en espesifico
+        public function getDatos($id){ return $this->listMiembros("select * from `miembros` where `id` = ".$id); }
+
+        // Actualizar datos del usuario
+        public function setDatos($datos){
+           $query = "update `miembros` set `cedula`=".$datos->ced." , `nombre`='".$datos->nomb."' , `apellido`='".$datos->apell."' , `telefono`=".$datos->cel." , `correo`='".$datos->eMail."' , `nacimiento`='".$datos->dateN."' , `ingreso`='".$datos->dateI."' , `estado`='".$datos->estado."' where `id`='".$datos->id."' ";
+           return $this->querys($query);
+        }
 
     }
-
-    // $datos['ced']=20262861;
-    // $datos['nomb']="Marco";
-    // $datos['apell']="Velasquez";
-    // $datos['cel'] = 4148930664;
-    // $datos['eMail']="correo@correo.com";
-    // $datos['dateN']="1990-05-30";
-    // $datos['dateI']="2020-04-18";
-    // $datos['estado']=0;
-
-    // $insta = new Modelo();
-    // $datos = json_encode($datos);
-    // $datos = json_decode($datos);
-    // echo $insta->NuevoUsuario($datos);
-
-    //echo true;
-
-    // print_r($insta->cargar());
 
 ?>
