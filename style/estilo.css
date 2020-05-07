@@ -1,0 +1,31 @@
+h1{
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+p{
+    text-align: center;
+    font-size: 22px;
+}
+.centrar{
+    margin: auto;
+}
+.ancho50{
+    width: 50%;
+}
+.margen{
+    margin-top: 20px;
+}
+.cargaSpiner{
+    text-align: center;
+    padding-top: 100px;
+}
+.animatepopup{
+    transition: 0.5s all linear;
+}
+.animatepopup.ng-hide{
+    opacity: 0;
+}
+.link{
+    color: black;
+} 

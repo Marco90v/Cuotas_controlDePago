@@ -1,0 +1,53 @@
+<!-- ng-controller="ModifiCuota" -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 margen">
+			<form name="datoMonto">
+				<div class="form-group row">
+					<label for="Monto" class="col-sm-2 col-form-label col-form-label-sm">Monto</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control form-control-sm" id="Monto" ng-required="true" ng-model="monto">
+					</div>
+				</div>
+				<button class="btn btn-success btn-sm" ng-click="guardar()" ng-disabled="datoMonto.$invalid">
+					<i class="fas fa-save"></i>
+					Agregar
+				</button>
+			</form>
+		</div>
+		<div class="col-md-6 offset-md-3 alert alert-success margen animatepopup" role="alert" ng-show="trueNuevo"> 
+			Nuevo Monto Agregado
+		</div>
+		<div class="col-md-6 offset-md-3 alert alert-danger margen animatepopup" role="alert" ng-show="falseNuevo">
+			Error al Agregar Monto
+		</div>
+		<table class="table table-sm centrar margen ancho50">
+			<thead class="thead-dark">
+			  <tr>
+				<th scope="col">ID</th>
+				<th>Fecha de Creacion</th>
+				<th>Monto</th>
+			  </tr>
+			</thead>
+			<tbody>
+				<tr ng-if="listMonto==-1">
+					<td class="cargaSpiner" colspan="12">
+						<i class="fas fa-spinner fa-pulse fa-10x"></i>
+					</td>
+				</tr>
+				<tr ng-if="listMonto==0">
+					<td colspan="12">
+						<div class="alert alert-primary" role="alert">
+							Sin montos agregados
+						</div>
+					</td>
+				</tr>
+				<tr ng-repeat="Lista in dataset" >
+					<th scope="row">{{Lista.id}}</th>
+					<td>{{Lista.f_creacion}}</td>
+					<td>{{Lista.monto}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,69 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 margen">
+			<form name="datosUsuario">
+				<div class="form-group row">
+					<label for="Cedula" class="col-sm-2 col-form-label col-form-label-sm">Cedula</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control form-control-sm" id="cedula" ng-required="true" ng-model="datos.ced">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="Nombre" class="col-sm-2 col-form-label col-form-label-sm">Nombre</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control form-control-sm" id="Nombre" required ng-model="datos.nomb">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="Apellido" class="col-sm-2 col-form-label col-form-label-sm">Apellido</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control form-control-sm" id="Apellido" required ng-model="datos.apell">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="Telefono" class="col-sm-2 col-form-label col-form-label-sm">Telefono</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control form-control-sm" id="Telefono" required  ng-model="datos.cel">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="Correo" class="col-sm-2 col-form-label col-form-label-sm">Correo</label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control form-control-sm" id="Correo" required ng-model="datos.eMail">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="f_Nacimiento" class="col-sm-2 col-form-label col-form-label-sm">Nacimiento</label>
+					<div class="col-sm-10">
+						<input type="date" class="form-control form-control-sm" id="f_Nacimiento" required ng-model="datos.dateN">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="f_Ingreso" class="col-sm-2 col-form-label col-form-label-sm">Ingreso</label>
+					<div class="col-sm-10">
+						<input type="date" class="form-control form-control-sm" id="f_Ingreso" required ng-model="datos.dateI">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="Estado" class="col-sm-2 col-form-label col-form-label-sm">Estado</label>
+					<div class="col-sm-10">
+						<select class="form-control form-control-sm" ng-model="datos.estado">
+							<option value="0">Desactivado</option>
+							<option value="1">Activado</option>
+						</select>
+					</div>
+				</div>
+				<button class="btn btn-success btn-sm" ng-click="guardar()" ng-disabled="datosUsuario.$invalid">
+					<i class="fas fa-save"></i>
+					Guardar 
+				</button>
+			</form>
+			<div class="alert alert-success margen animatepopup" role="alert" ng-show="trueNuevo">
+				Nuevo Usuario Agregado
+			</div>
+			<div class="alert alert-danger margen animatepopup" role="alert" ng-show="falseNuevo">
+				Error al Agregar Nuevo Usuario
+			</div>
+		</div>
+	</div>
+</div>

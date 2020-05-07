@@ -1,0 +1,57 @@
+<!-- ng-controller="pagar" -->
+<div class="container">
+	<div class="row">
+		<table class="table table-sm table-hover col-md-6 offset-md-3 margen">
+			<thead class="thead-dark">
+			  <tr>
+				<th>Mes</th>
+				<th>Monto</th>
+			  </tr>
+			</thead>
+			<tbody>
+				<tr ng-if="listDeuda==-1">
+					<td class="cargaSpiner" colspan="12">
+						<!-- <i class="fas fa-spinner fa-spin fa-10x"></i> -->
+						<i class="fas fa-spinner fa-pulse fa-10x"></i>
+					</td>
+				</tr>
+				<tr ng-if="listDeuda==0">
+					<td colspan="12">
+						<div class="alert alert-primary" role="alert">
+							Sin deudas
+						</div>
+					</td>
+				</tr>
+				<tr ng-repeat="Lista in dataset | filter: buscarM" >
+					<td>{{Lista.mes}}</td>
+					<td>{{Lista.monto}}</td>
+				</tr>
+				<tr ng-if="listDeuda==1">
+					<th scope="row">Total</th>
+					<td>{{total}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="col-md-6 offset-md-3 margen">
+			<form name="datosUsuario">
+				<div class="form-group row">
+					<label for="Monto" class="col-sm-2 col-form-label col-form-label-sm">Monto</label>
+					<div class="col-sm-10">
+						<input type="number" class="form-control form-control-sm" id="Monto" ng-required="true" ng-model="montoPagar">
+					</div>
+				</div>
+				<button class="btn btn-success btn-sm" ng-click="pagar()" ng-disabled="datosUsuario.$invalid">
+					<span class="glyphicon glyphicon-floppy-save"></span>
+					Pagar
+				</button>
+			</form>
+			<div class="alert alert-success margen animatepopup" role="alert" ng-show="trueNuevo">
+				Pago realizado
+			</div>
+			<div class="alert alert-danger margen animatepopup" role="alert" ng-show="falseNuevo">
+				Error al realizar el pago
+			</div>
+		</div>
+	</div>
+</div>

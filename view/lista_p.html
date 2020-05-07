@@ -1,0 +1,41 @@
+<!-- ng-controller="Lpagos" -->
+<div class="container">
+	<div class="row">
+		<table class="table table-sm margen">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">ID</th>
+					<th>Cedula</th>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Fecha de pago</th>
+					<th>Fecha de cancelación</th>
+					<th>Monto</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-if="listPagos==-1">
+					<td class="cargaSpiner" colspan="12">
+						<i class="fas fa-spinner fa-pulse fa-10x"></i>
+					</td>
+				</tr>
+				<tr ng-if="listPagos==0">
+					<td colspan="12">
+						<div class="alert alert-primary" role="alert">
+							No tiene historial de pago
+						</div>
+					</td>
+				</tr>
+				<tr ng-repeat="Lista in dataset | filter: buscarM" >
+					<th scope="row">{{Lista.id}}</th>
+					<td>{{Lista.cedula}}</td>
+					<td>{{Lista.nombre}}</td>
+					<td>{{Lista.apellido}}</td>
+					<td>{{Lista.f_pago}}</td>
+					<td>{{Lista.f_cancelacion}}</td>
+					<td>{{Lista.monto}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

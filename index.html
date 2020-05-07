@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="cuotas">
+<head>
+	<meta charset="UTF-8">
+	<!-- Librerias Angular -->
+	<script src= "lib/angular.min.js"></script>
+	<script src="lib/angular-route.min.js"></script>
+	<script src="lib/angular-animate.min.js"></script>
+
+	<!-- Librerias bootstrap -->
+	<link rel="stylesheet" href="lib/bootstrap.min.css">
+	<script src="lib/jquery-3.4.1.min.js"></script>
+	<script src="lib/bootstrap.min.js"></script>
+
+	<!-- Script del sistema -->
+	<script src= "app/controlador.js"></script>
+	
+	<!-- Estilos propios -->
+	<link rel="stylesheet" href="lib/css/all.min.css">
+	<link rel="stylesheet" href="style/estilo.css">
+
+	<title>Control de pagos</title>
+</head>
+<body>
+	<div class="container-fluid" >
+		<div class="row">
+			<h1>Sistema de control de pago</h1>
+			<div class="col-md-12">
+				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+					<a class="navbar-brand mb-0 h1" href="#!/">Inicio</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+				  
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					  <ul class="navbar-nav mr-auto">
+						<li class="nav-item ">
+						  <a class="nav-link"  href="#!/ListaMiembros">Lista de Miembros</a>
+						</li>
+						<li class="nav-item ">
+							<a class="nav-link"  href="#!/NuevoMiembro">Nuevo Miembro</a>
+						</li>
+						<li class="nav-item ">
+							<a class="nav-link" href="#!/ModificarCuo">Modificar Cuotas</a>
+						</li>
+					  </ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<div class=""ng-view> </div>
+	</div>
+	
+	<script src="lib/popper.min.js"></script>
+</body>
+</html>
