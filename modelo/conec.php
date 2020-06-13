@@ -1,4 +1,8 @@
 <?php
+	header("Access-Control-Allow-Origin: *");
+	header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE");
+	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+	
 	class cone
 	{
 		private $datosConn = array(
@@ -39,7 +43,7 @@
 				PRIMARY KEY (id)
 			)";
 
-		//INICIO DE SESION EN LA BASE DE DATOS
+		//INICIO DE SESIÓN EN LA BASE DE DATOS
 		private function conectar(){
 			$conn = new mysqli($this->datosConn["direcSQL"],
 								$this->datosConn["nomSQL"],
@@ -57,10 +61,10 @@
 			return $res;
 		}
 
-		// CONECTA A LA BASE DE DATOS, SI NO EXISTE LLAMA A LA FUNCION PARA CREARLA
+		// CONECTA A LA BASE DE DATOS, SI NO EXISTE LLAMA A LA FUNCIÓN PARA CREARLA
 		private function conecDB($conn){ return $conn->select_db($this->datosConn["BaseSQL"]) ? $conn : $this->createDB($conn); }
 
-		// CREAR BASE DEDATOS, UNA VEZ CREADA LLAMA A LA FUNCION PARA CREAR TABLAS
+		// CREAR BASE DE DATOS, UNA VEZ CREADA LLAMA A LA FUNCIóN PARA CREAR TABLAS
 		private function createDB($conn){ return $conn->query("create database ".$this->datosConn["BaseSQL"]) ? $this->createTable($conn) : false; }
 
 		// SI LAS TABLAS NO EXISTEN LLAMA A LAS FUNCIONES PARA CREARLAS

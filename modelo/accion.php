@@ -1,8 +1,12 @@
 <?php
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE");
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+
     include ("modelo.php");
     $datos = json_decode(file_get_contents("php://input"));
     if (isset($datos)) {
-        // Instanccia de modelo para las accion del backend
+        // Instancia de modelo para las acción del backend
         $accion = new Modelo();
         // Acciones
         switch ($datos->accion) {
