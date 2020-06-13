@@ -1,10 +1,14 @@
 <?php
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE");
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+    
     setlocale(LC_TIME, "spanish");
     include ('conec.php');
 
     class Modelo {
 
-        // Ejecucion del Query
+        // Ejecución del Query
         private function querys($query){
             $conn = new cone();
             $result = $conn->consulQuery($query);
@@ -15,7 +19,7 @@
         // Fecha actual
         private function fechaActual(){ return date("Y-m-d"); }
 
-        // Dar formato al select para su devolucion
+        // Dar formato al select para su devolución
         private function formatSelect($result){
             $fila;
             foreach ($result as $key => $value) {$fila[$key]=$value; }
@@ -28,7 +32,7 @@
             return $result->num_rows > 0 ? json_encode($this->formatSelect($result)) : '{"msg":false}';
         }
 
-        // Agrega nuevo suario
+        // Agrega nuevo usuario
         public function nuevoUsuario($datos){
             $monto = $this->getUltimoMonto();
             if (!$monto){return '{"msg":"Debe agregar un Monto primero"}';}
@@ -60,7 +64,7 @@
             return json_encode($result);
         }
 
-        // Retorna lista de montos
+        // Retorna lista de monto
         public function cargarMonto($query = "select * from `montos`"){
             $result = $this->querys($query);
             return $result->num_rows > 0 ? json_encode($this->formatSelect($result)) : '{"msg":false}';
@@ -118,7 +122,7 @@
             }
         }
 
-        // Recuperar datos de un usuario en espesifico
+        // Recuperar datos de un usuario en concreto
         public function getDatos($id){ return $this->listMiembros("select * from `miembros` where `id` = ".$id); }
 
         // Actualizar datos del usuario
