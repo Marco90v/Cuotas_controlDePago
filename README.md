@@ -14,7 +14,7 @@ Al momento de registrar un nuevo usuario se tomo por entendido que se realizo el
 En el historial de pago se refleja la fecha que corresponde al día en que se vence el plazo, por defecto se define en el primer día de cada mes, y la fecha de cancelación corresponde al día en que se esta realizando el pago.
 
 ### Autor
-Marco Velasquez Figarella
+Marco
 
 ### Screenshot
 
